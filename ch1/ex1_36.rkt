@@ -1,0 +1,16 @@
+#lang sicp
+(define (close a b)
+  (let ((e 0.000001))
+    (< (abs (- a b)) e)))
+(define (fixed-point f first-guess)
+  (define (iter guess)
+    (display guess)
+    (newline)
+    (let ((next (f guess)))
+          (if (close guess next) guess
+              (iter next))))
+  (iter first-guess))
+(define (average x y) (/ (+ x y) 2))
+(define (x-to-the-x y) 
+   (fixed-point (lambda (x) (average x (/ (log y) (log x)))) 
+     10.0)) 
