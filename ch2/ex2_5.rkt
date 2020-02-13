@@ -1,0 +1,18 @@
+#lang sicp
+(define (f n k)
+  (define (iter x r)
+    (if (= (remainder x k) 0)
+        (iter (/ x k) (+ r 1))
+        r))
+  (iter n 0))
+(define (expo x n)
+  (define (iter a k)
+    (if (= k 0) a (iter (* a x) (- k 1))))
+  (iter 1 n))
+(define (cons a b) (* (expo 2 a) (expo 3 b)))
+(define (car z) (f z 2))
+(define (cdr z) (f z 3))
+;test
+(define t (cons 0 1))
+(car t)
+(cdr t)

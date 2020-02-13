@@ -1,0 +1,11 @@
+#lang sicp
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (if (< d 0) (cons (/ (- n) g) (/ (- d) g)) (cond (/ n g) (/ d g)))))
+(define (print x)
+  (newline)
+  (display (numer x))
+  (display "/")
+  (display (denom x)))
+(define (numer x) (car x))
+(define (denom x) (cdr x))
