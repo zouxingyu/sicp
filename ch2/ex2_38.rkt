@@ -1,0 +1,15 @@
+#lang sicp
+(define (accumulate op init seq)
+  (cond ((null? seq) init)
+        (else (op (car seq)
+                  (accumulate op init (cdr seq))))))
+(define (fold-left op init seq)
+  (define (iter result rest)
+    (cond ((null? rest) result)
+          (else (iter (op result (car rest)) (cdr rest)))))
+  (iter init seq))
+;;test
+(accumulate list nil '(1 2 3))
+(fold-left list nil '(1 2 3))
+(accumulate / 1 '(1 2 3))
+(fold-left / 1 '(1 2 3))
