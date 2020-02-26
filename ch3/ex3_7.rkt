@@ -1,0 +1,28 @@
+#lang sicp
+(define (make-account balance password)
+  (define (withdraw amount)
+    (if (> amount balance)
+        "insufficient funds"
+        (begin (set! balance (- balance amount)) balance)))
+  (define (deposit amount)
+     (begin (set! balance (+ balance amount)) balance))
+  (define (dispatch msg)
+         (cond ((eqv? msg 'withdraw) withdraw)
+               ((eqv? msg 'deposit) deposit)
+               (else (error "unknow request"))))
+  (define (verify pwd)
+    (if (eq? pwd password)
+        dispatch
+        (error "invalid password")))
+  verify)
+(define (make-join account1-id account1-pwd account2-pwd)
+  (let ((pwd account2-pwd))
+    (lambda (enter) (if (eq? enter pwd)
+                        (account1-id account1-pwd)
+                        (error "invalid password")))))
+;test
+(define peter-acc (make-account 100 'zxy))
+(define paul-acc (make-join peter-acc 'zxy 'abc))
+(((peter-acc 'zxy) 'withdraw) 10)
+(((paul-acc 'abc) 'withdraw)  20)
+(((paul-acc '123) 'withdraw)  20)

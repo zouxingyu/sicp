@@ -1,0 +1,20 @@
+#lang sicp
+(define (make-account balance password)
+  (define (withdraw amount)
+    (if (> amount balance)
+        "insufficient funds"
+        (begin (set! balance (- balance amount)) balance)))
+  (define (deposit amount)
+     (begin (set! balance (+ balance amount)) balance))
+  (define (dispatch pwd msg)
+    (if (not (eqv? pwd password))
+         (error "incorrect password")
+         (cond ((eqv? msg 'withdraw) withdraw)
+               ((eqv? msg 'deposit) deposit)
+               (else (error "unknow request")))))
+  dispatch)
+;test
+(define acc (make-account 100 'zxy))
+((acc 'zxy 'withdraw) 10)
+((acc 'zxy 'deposit) 10)
+((acc 'abc 'withdraw) 10)

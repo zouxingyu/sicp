@@ -1,0 +1,17 @@
+#lang sicp
+  
+ (define (find-cycle? lis) 
+   (define (iter searchlist seen) 
+     (cond ((not (pair? searchlist)) #f) 
+           ((memq searchlist seen) #t) 
+           (else (or (iter (car searchlist) (cons searchlist seen)) 
+                     (iter (cdr searchlist) (cons searchlist seen))))))
+   (iter lis '())) 
+(define (last-pair x)
+  (if (null? (cdr x)) x (last-pair (cdr x))))
+(define (make-cycle x)
+  (set-cdr! (last-pair x) x) x)
+(define a '(a b c))
+(define b '(d e f))
+(find-cycle? a)
+(find-cycle? (make-cycle b))

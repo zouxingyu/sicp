@@ -1,0 +1,30 @@
+#lang sicp
+ (define (contains-cycle? lst) 
+   (define (safe-cdr l) 
+     (if (pair? l) 
+         (cdr l) 
+         '()))
+    (define (safe-car l) 
+     (if (pair? l) 
+         (car l) 
+         '()))
+   (define (iter a b) 
+     (cond ((not (pair? a)) #f) 
+           ((not (pair? b)) #f) 
+           ((eq? a b) #t) 
+           ;((eq? a (safe-cdr b)) #t) 
+           (else (or (iter (safe-car a) (safe-cdr (safe-car a))) (iter (safe-cdr a) (safe-cdr (safe-cdr b))))))) 
+   (iter lst (safe-cdr lst)))
+  
+ (define x '(1 2 3 4 5 6 7 8)) 
+ (define y '(1 2 3 4 5 6 7 8)) 
+ (set-cdr! (cdddr (cddddr y)) (cdddr y)) 
+ (define z '(1)) 
+ (set-cdr! z z)
+ (set-car! x z)
+ x ; (1 2 3 4 5 6 7 8) 
+ y ; (1 2 3 . #0=(4 5 6 7 8 . #0#)) 
+ z ; #0=(1 . #0#) 
+ (contains-cycle? x) ; #f 
+ (contains-cycle? y) ; #t 
+ (contains-cycle? z) ; #t 
