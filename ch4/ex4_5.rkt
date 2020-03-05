@@ -1,0 +1,18 @@
+#lang sicp
+(define (expand-clauses clauses)
+  (if (null? clauses)
+      'false
+      (let ((first (car clauses))
+            (rest (cdr clauses)))
+        (if (cond-else-clauses? first)
+            (if (null? rest)
+                (sequence->exp (cond-actions first))
+                (error "..............."))
+            (if (eq? (car (cond-actions first)) '=>)
+                (make-if (cond-predicate first)
+                         (list (cadr (cond-actions first))
+                               (cond-predicate first))
+                         (expand-clauses rest))
+                (make-if (cond-predicate first)
+                         (sequence->exp (cond-actions first))
+                         (expand-clauses rest)))))))

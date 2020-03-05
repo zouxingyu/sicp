@@ -1,0 +1,28 @@
+#lang sicp
+;(define (let? exp) (tagged-list? exp 'let))
+(define (let-vars exp)  (map car (cadr exp)))
+(define (let-exps exp)  (map cadr (cadr exp)))
+(define (let-body exp) (cddr exp))
+;(define (let->combination exp)
+;  (cons (make-lambda (let-vars exp) (let-body exp))
+;        (let-exps exp)))
+;((let? exp) (eval (let-combination exp) env))
+
+(define (let*->nested-lets exp)
+  (define (helper init)
+    (if (null? init)
+        (sequence->exp (let-body exp))
+        (make-let (list (car init))
+                  (list (helper (cdr init))))))
+ (helper (cadr exp)))
+(define (make-let init body)
+  (cons 'let
+        (cons init body)))
+
+(define (last-exp? exp) (null? (cdr exp)))
+(define (first-exp exp) (car exp))
+(define (sequence->exp seq)
+  (cond ((null? seq) seq)
+        ((last-exp? seq) (first-exp seq))
+        (else (make-begin seq))))
+(define (make-begin seq) (cons 'begin seq))
