@@ -6,4 +6,4 @@
 (define (let->combination exp)
   (cons (make-lambda (let-vars exp) (let-body exp))
         (let-exps exp)))
-((let? exp) (eval (let-combination exp) env)
+((let? exp) (analyze (let-combination exp)))

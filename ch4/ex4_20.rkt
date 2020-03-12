@@ -1,0 +1,12 @@
+#lang sicp
+(define (letrec? exp) (tagged-list? exp 'letrec))
+(define (letrec-inits exp) (cadr exp))
+(define (letrec-body exp) (cddr exp))
+(define (declare-variable exp)
+  (map (lambda (x) (list (car x) '*unassigned*)) (letrec-inits exp)))
+(define (set-variable exp)
+  (map (lambda (x) (list ('set! (car x) (cadr x)))) (letrec-inits exp)))
+(define (letrec->let exp)
+  (list 'let (declare-variable exp)
+        (append (set-variable exp)
+                (letrec-body exp))))
